@@ -40,8 +40,9 @@ Constraints:
 s contains only digits and may contain leading zero(s).
 '''
 
+# Recursive
 class Solution(object):
-    def numDecodings(self, s):
+    def numDecodings(self, s): 
         """
         :type s: str
         :rtype: int
@@ -72,3 +73,28 @@ class Solution(object):
                 return self.numDecodings(s[:mid])*self.numDecodings(s[mid:]) + self.numDecodings(s[:(mid-1)]) * self.numDecodings(s[(mid+1):]) 
             else:
                 return self.numDecodings(s[:mid])*self.numDecodings(s[mid:])
+
+# Dynamic Programing             
+class Solution(object):
+    def numDecodings(self, s):
+        """
+        :type s: str
+        :rtype: int
+        """
+        dp = [0] * (len(s)+1)
+        dp[0] = 1
+
+        if s[0] == '0':
+            return 0
+
+        else:
+            dp[1] = 1
+        
+        for i in range(1,len(s)):
+            if int(s[i]) > 0:
+                dp[i+1] += dp[i]
+            
+            if 10 <= int(s[(i-1):(i+1)]) and  int(s[(i-1):(i+1)]) <=26:
+                dp[i+1] += dp[i-1]
+
+        return dp[-1]
